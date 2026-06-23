@@ -1,2 +1,25 @@
-# subscription-service
-REST service for managing user subscriptions and calculating subscription costs.
+Subscription Service
+
+REST сервис для агрегации данных об онлайн подписках пользователей
+
+Технологии
+
+ - Go
+ - PostgreSQL
+ - Chi Router
+ - Docker Compose
+ - Swagger
+ - Golang Migrate
+ - Slog
+
+Функциональность
+
+ - Создание подписки
+ - Получение подписки
+ - Обновление подписки
+ - Удаление подписки
+ - Получение списка подписок
+ - Подсчет стоимости подписок за период
+
+Запуск
+

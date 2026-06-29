@@ -62,5 +62,5 @@ func ToSubscriptionsResponse(subscriptions []domain.Subscription) []Subscription
 }
 
 type TotalResponse struct {
-	Total int `json:"total"`
+	Total int64 `json:"total"`
 }

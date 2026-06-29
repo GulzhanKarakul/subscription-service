@@ -2,45 +2,59 @@ package main
 
 import (
 	"context"
-	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/GulzhanKarakul/subscription-service/internal/handler"
+	"github.com/GulzhanKarakul/subscription-service/internal/middleware"
+	"github.com/GulzhanKarakul/subscription-service/internal/repository"
+	"github.com/GulzhanKarakul/subscription-service/internal/service"
 	"github.com/GulzhanKarakul/subscription-service/pkg/config"
 	"github.com/GulzhanKarakul/subscription-service/pkg/database"
+	"github.com/GulzhanKarakul/subscription-service/pkg/logger"
 )
 
 func main() {
-	// Srtuctured logger
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	logger.Info("starting subscription-service")
 	cfg := config.Load()
+	log := logger.New(cfg.LogLevel)
+	log.Info("starting subscription-service...")
 
 	// connect to database
 	db, err := database.NewPostgres(database.DefaultConfig(cfg.DSN()))
 	if err != nil {
-		logger.Error("failed to connect to database", "error", err)
+		log.Error("failed to connect to database", "error", err)
 		os.Exit(1)
 	}
 	defer db.Close()
-	logger.Info("connected to database")
+	log.Info("connected to database")
+
+	// server repositories
+	repo := repository.NewSubscriptionRepository(db)
+
+	// server services
+	svc := service.NewSubscriptionService(repo, log)
+
+	// server hadler
+	h := handler.NewHandler(svc, log)
+
+	router := middleware.Logger(log)(middleware.Recovery(log)(h.Routes()))
 
 	// Http server with timeout
 	srv := &http.Server{
 		Addr:         ":" + cfg.Server.Port,
-		Handler:      nil,
+		Handler:      router,
 		ReadTimeout:  15 * time.Second, // request timeout
 		WriteTimeout: 15 * time.Second, // response timeout
 		IdleTimeout:  60 * time.Second, // keep-alive timeout
 	}
-	logger.Info("server started", "port", cfg.Server.Port)
+	log.Info("server started", "port", cfg.Server.Port)
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			logger.Error("server failed", "error", err)
+			log.Error("server failed", "error", err)
 			os.Exit(1)
 		}
 	}()
@@ -50,14 +64,14 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	logger.Info("server shutting down...")
+	log.Info("server shutting down...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		logger.Error("forced shutdown", "error", err)
+		log.Error("forced shutdown", "error", err)
 	}
 
-	logger.Info("server stopped")
+	log.Info("server stopped")
 }

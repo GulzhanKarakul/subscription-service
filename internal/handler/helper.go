@@ -64,28 +64,28 @@ func parseDate(s string) (time.Time, error) {
 func subscriptionFromRequest(req dto.CreateSubscriptionRequest) (domain.Subscription, error) {
 	userID, err := parseUUID(req.UserID)
 	if err != nil {
-			return domain.Subscription{}, fmt.Errorf("invalid user_id: %w", domain.ErrInvalidInput)
+		return domain.Subscription{}, fmt.Errorf("invalid user_id: %w", domain.ErrInvalidInput)
 	}
 
 	startDate, err := parseDate(req.StartDate)
 	if err != nil {
-			return domain.Subscription{}, fmt.Errorf("invalid start_date: %w", domain.ErrInvalidInput)
+		return domain.Subscription{}, fmt.Errorf("invalid start_date: %w", domain.ErrInvalidInput)
 	}
 
 	var endDate *time.Time
 	if req.EndDate != "" {
-			t, err := parseDate(req.EndDate)
-			if err != nil {
-					return domain.Subscription{}, fmt.Errorf("invalid end_date: %w", domain.ErrInvalidInput)
-			}
-			endDate = &t
+		t, err := parseDate(req.EndDate)
+		if err != nil {
+			return domain.Subscription{}, fmt.Errorf("invalid end_date: %w", domain.ErrInvalidInput)
+		}
+		endDate = &t
 	}
 
 	return domain.Subscription{
-			ServiceName: req.ServiceName,
-			Price:       req.Price,
-			UserID:      userID,
-			StartDate:   startDate,
-			EndDate:     endDate,
+		ServiceName: req.ServiceName,
+		Price:       req.Price,
+		UserID:      userID,
+		StartDate:   startDate,
+		EndDate:     endDate,
 	}, nil
 }

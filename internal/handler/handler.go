@@ -11,8 +11,8 @@ import (
 )
 
 type Handler struct {
-	svc        service.SubscriptionService
-	log           *slog.Logger
+	svc service.SubscriptionService
+	log *slog.Logger
 }
 
 func NewHandler(
@@ -21,7 +21,7 @@ func NewHandler(
 ) *Handler {
 	return &Handler{
 		svc: svc,
-		log:           log,
+		log: log,
 	}
 }
 

@@ -84,7 +84,7 @@ func (h *Handler) getSubscriptionByID(w http.ResponseWriter, r *http.Request) {
 // @Router       /subscriptions/{id} [put]
 func (h *Handler) updateSubscription(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	subID, err := parseUUID(id) // 
+	subID, err := parseUUID(id) //
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid id")
 		return
@@ -122,7 +122,7 @@ func (h *Handler) updateSubscription(w http.ResponseWriter, r *http.Request) {
 // @Router       /subscriptions/{id} [delete]
 func (h *Handler) deleteSubscription(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	subID, err := parseUUID(id) // 
+	subID, err := parseUUID(id) //
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid id")
 		return

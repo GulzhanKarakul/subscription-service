@@ -1,5 +1,5 @@
 # ========= BUILD STAGE ============
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 # install git for private dependencies
 RUN apk add --no-cache git
 WORKDIR /app

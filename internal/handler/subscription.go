@@ -11,6 +11,16 @@ import (
 )
 
 // POST /api/v1/subscriptions - Create
+// @Summary      Create subscription
+// @Description  Create a new subscription for a user
+// @Tags         subscriptions
+// @Accept       json
+// @Produce      json
+// @Param        request body dto.CreateSubscriptionRequest true "Subscription data"
+// @Success      201 {object} dto.SubscriptionResponse
+// @Failure      400 {object} handler.ErrorResponse
+// @Failure      500 {object} handler.ErrorResponse
+// @Router       /subscriptions [post]
 func (h *Handler) createSubscription(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateSubscriptionRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -34,6 +44,15 @@ func (h *Handler) createSubscription(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET /api/v1/subscriptions/{id} - GetByID
+// @Summary      Get subscription by ID
+// @Tags         subscriptions
+// @Produce      json
+// @Param        id path string true "Subscription ID"
+// @Success      200 {object} dto.SubscriptionResponse
+// @Failure      400 {object} handler.ErrorResponse
+// @Failure      404 {object} handler.ErrorResponse
+// @Failure      500 {object} handler.ErrorResponse
+// @Router       /subscriptions/{id} [get]
 func (h *Handler) getSubscriptionByID(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	subID, err := parseUUID(id)
@@ -52,6 +71,17 @@ func (h *Handler) getSubscriptionByID(w http.ResponseWriter, r *http.Request) {
 }
 
 // PUT /api/v1/subscriptions/{id} - Update
+// @Summary      Update subscription
+// @Tags         subscriptions
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Subscription ID"
+// @Param        request body dto.UpdateSubscriptionRequest true "Updated data"
+// @Success      200 {object} dto.SubscriptionResponse
+// @Failure      400 {object} handler.ErrorResponse
+// @Failure      404 {object} handler.ErrorResponse
+// @Failure      500 {object} handler.ErrorResponse
+// @Router       /subscriptions/{id} [put]
 func (h *Handler) updateSubscription(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	subID, err := parseUUID(id) // 
@@ -82,7 +112,14 @@ func (h *Handler) updateSubscription(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, dto.ToSubscriptionResponse(sub))
 }
 
-// DELETE /api/v1/subscriptions/{id} - Delete
+// @Summary      Delete subscription
+// @Tags         subscriptions
+// @Param        id path string true "Subscription ID"
+// @Success      204
+// @Failure      400 {object} handler.ErrorResponse
+// @Failure      404 {object} handler.ErrorResponse
+// @Failure      500 {object} handler.ErrorResponse
+// @Router       /subscriptions/{id} [delete]
 func (h *Handler) deleteSubscription(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	subID, err := parseUUID(id) // 
@@ -100,7 +137,16 @@ func (h *Handler) deleteSubscription(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// GET /api/v1/subscriptions - List
+// @Summary      List subscriptions
+// @Tags         subscriptions
+// @Produce      json
+// @Param        user_id      query string false "Filter by user ID"
+// @Param        service_name query string false "Filter by service name"
+// @Param        limit        query int    false "Limit (default 20)"
+// @Param        offset       query int    false "Offset (default 0)"
+// @Success      200 {array}  dto.SubscriptionResponse
+// @Failure      500 {object} handler.ErrorResponse
+// @Router       /subscriptions [get]
 func (h *Handler) getSubscriptionsList(w http.ResponseWriter, r *http.Request) {
 	var userID *uuid.UUID
 	if id := r.URL.Query().Get("user_id"); id != "" {
@@ -138,7 +184,17 @@ func (h *Handler) getSubscriptionsList(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, dto.ToSubscriptionsResponse(subscriptions))
 }
 
-// GET /api/v1/subscriptions/total - CalculateTotal
+// @Summary      Calculate total cost
+// @Tags         subscriptions
+// @Produce      json
+// @Param        from         query string false "From date MM-YYYY"
+// @Param        to           query string false "To date MM-YYYY"
+// @Param        user_id      query string false "Filter by user ID"
+// @Param        service_name query string false "Filter by service name"
+// @Success      200 {object} dto.TotalResponse
+// @Failure      400 {object} handler.ErrorResponse
+// @Failure      500 {object} handler.ErrorResponse
+// @Router       /subscriptions/total [get]
 func (h *Handler) calculateTotal(w http.ResponseWriter, r *http.Request) {
 	var userID *uuid.UUID
 	if id := r.URL.Query().Get("user_id"); id != "" {

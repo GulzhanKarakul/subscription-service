@@ -57,7 +57,6 @@ func (r *subscriptionRepository) Create(
 	return s, nil
 }
 
-
 // GetByID
 func (r *subscriptionRepository) GetByID(
 	ctx context.Context,
@@ -133,14 +132,14 @@ func (r *subscriptionRepository) Update(
 
 // Delete
 func (r *subscriptionRepository) Delete(
-    ctx context.Context,
-    id uuid.UUID,
+	ctx context.Context,
+	id uuid.UUID,
 ) error {
 	const query = `
 		DELETE FROM subscriptions
 		WHERE id = $1
 	`
-	result, err := r.db.ExecContext(ctx, query, id); 
+	result, err := r.db.ExecContext(ctx, query, id)
 	if err != nil {
 		return fmt.Errorf("subscriptionRepository.Delete: %w", err)
 	}
@@ -153,15 +152,15 @@ func (r *subscriptionRepository) Delete(
 
 // List
 func (r *subscriptionRepository) List(
-    ctx context.Context,
-    userID *uuid.UUID,
-    serviceName *string,
-    limit, offset int,
+	ctx context.Context,
+	userID *uuid.UUID,
+	serviceName *string,
+	limit, offset int,
 ) ([]domain.Subscription, error) {
 	var (
 		conditions []string
-		args []any
-		argIdx = 1
+		args       []any
+		argIdx     = 1
 	)
 	if userID != nil {
 		conditions = append(conditions, fmt.Sprintf("user_id = $%d", argIdx))
@@ -180,7 +179,7 @@ func (r *subscriptionRepository) List(
 	`
 	if len(conditions) > 0 {
 		query += " WHERE " + strings.Join(conditions, " AND ")
-	} 
+	}
 	query += fmt.Sprintf(" ORDER BY created_at DESC LIMIT $%d OFFSET $%d", argIdx, argIdx+1)
 	args = append(args, limit, offset)
 
@@ -217,15 +216,15 @@ func (r *subscriptionRepository) List(
 
 // CalculateTotal
 func (r *subscriptionRepository) CalculateTotal(
-    ctx context.Context,
-    from, to time.Time,
-    userID *uuid.UUID,
-    serviceName *string,
+	ctx context.Context,
+	from, to time.Time,
+	userID *uuid.UUID,
+	serviceName *string,
 ) (int64, error) {
 	var (
 		conditions []string
-		args []any
-		argIdx = 1
+		args       []any
+		argIdx     = 1
 	)
 
 	conditions = append(conditions,

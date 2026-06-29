@@ -21,7 +21,7 @@ func main() {
 
 	// connect to database
 	db, err := database.NewPostgres(database.DefaultConfig(cfg.DSN()))
-	if err != nil{
+	if err != nil {
 		logger.Error("failed to connect to database", "error", err)
 		os.Exit(1)
 	}
@@ -30,11 +30,11 @@ func main() {
 
 	// Http server with timeout
 	srv := &http.Server{
-		Addr: ":" + cfg.Server.Port,
-		Handler: nil,
-		ReadTimeout: 15 * time.Second, // request timeout
+		Addr:         ":" + cfg.Server.Port,
+		Handler:      nil,
+		ReadTimeout:  15 * time.Second, // request timeout
 		WriteTimeout: 15 * time.Second, // response timeout
-		IdleTimeout: 60 * time.Second, // keep-alive timeout
+		IdleTimeout:  60 * time.Second, // keep-alive timeout
 	}
 	logger.Info("server started", "port", cfg.Server.Port)
 

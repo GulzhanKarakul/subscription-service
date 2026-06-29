@@ -81,7 +81,7 @@ func (h *Handler) getSubscriptionByID(w http.ResponseWriter, r *http.Request) {
 // @Failure      400 {object} handler.ErrorResponse
 // @Failure      404 {object} handler.ErrorResponse
 // @Failure      500 {object} handler.ErrorResponse
-// @Router       /subscriptions/{id} [put]
+// @Router       /subscriptions/{id} [patch]
 func (h *Handler) updateSubscription(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	subID, err := parseUUID(id) //

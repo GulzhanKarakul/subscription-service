@@ -181,7 +181,7 @@ paths:
       summary: Get subscription by ID
       tags:
       - subscriptions
-    put:
+    patch:
       consumes:
       - application/json
       parameters:

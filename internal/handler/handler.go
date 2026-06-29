@@ -4,6 +4,8 @@ import (
 	"log/slog"
 	"net/http"
 
+	httpSwagger "github.com/swaggo/http-swagger"
+
 	"github.com/GulzhanKarakul/subscription-service/internal/service"
 	"github.com/go-chi/chi/v5"
 )
@@ -29,6 +31,8 @@ func (h *Handler) Routes() http.Handler {
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})
+
+	r.Get("/swagger/*", httpSwagger.Handler())
 
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Route("/subscriptions", func(r chi.Router) {

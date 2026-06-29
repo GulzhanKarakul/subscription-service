@@ -8,6 +8,8 @@ import (
 	"syscall"
 	"time"
 
+	_ "github.com/GulzhanKarakul/subscription-service/docs"
+
 	"github.com/GulzhanKarakul/subscription-service/internal/handler"
 	"github.com/GulzhanKarakul/subscription-service/internal/middleware"
 	"github.com/GulzhanKarakul/subscription-service/internal/repository"
@@ -17,6 +19,11 @@ import (
 	"github.com/GulzhanKarakul/subscription-service/pkg/logger"
 )
 
+// @title           Subscription Service API
+// @version         1.0
+// @description     REST API for managing user subscriptions
+// @host            localhost:8080
+// @BasePath        /api/v1
 func main() {
 	cfg := config.Load()
 	log := logger.New(cfg.LogLevel)

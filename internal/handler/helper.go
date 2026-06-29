@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type errorResponse struct {
+type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
@@ -23,7 +23,7 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 }
 
 func writeError(w http.ResponseWriter, status int, msg string) {
-	writeJSON(w, status, errorResponse{Error: msg})
+	writeJSON(w, status, ErrorResponse{Error: msg})
 }
 
 func (h *Handler) handleError(w http.ResponseWriter, err error) {

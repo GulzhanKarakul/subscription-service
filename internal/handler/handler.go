@@ -41,7 +41,7 @@ func (h *Handler) Routes() http.Handler {
 			r.Get("/", h.getSubscriptionsList)
 			r.Get("/total", h.calculateTotal)
 			r.Get("/{id}", h.getSubscriptionByID)
-			r.Put("/{id}", h.updateSubscription)
+			r.Patch("/{id}", h.updateSubscription)
 			r.Delete("/{id}", h.deleteSubscription)
 		})
 	})

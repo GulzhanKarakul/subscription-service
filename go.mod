@@ -7,4 +7,9 @@ require (
 	github.com/lib/pq v1.12.3
 )
 
-require github.com/google/uuid v1.6.0
+require (
+	github.com/GulzhanKarakul/payment-service v0.0.0-20260519183727-f25742329206
+	github.com/google/uuid v1.6.0
+)
+
+require github.com/go-chi/chi/v5 v5.3.0
